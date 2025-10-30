@@ -1,5 +1,5 @@
 ﻿<#
-    Script Name: DiskLUNMapping.ps1
+    Script Name: Disk.ps1
     Version: 2.1.0
     Last Updated: 2024-11-08
     Author: Preetham Umesh - AHEAD
@@ -211,4 +211,5 @@ foreach ($subscriptionId in $subscriptionIds) {
     } else {
         Write-Host "AzureDataDisk.csv not found for subscription $subscriptionId"
     }
+
 }
