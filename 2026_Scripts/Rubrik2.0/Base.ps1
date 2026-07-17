@@ -1,22 +1,40 @@
-# =========================
-# Setup
-# =========================
-$OutputFolder = "C:\Temp\RSV_Audit_202600407"
-$VaultInventoryCSV = "$OutputFolder\VaultInventory.csv"
-$VMMappingCSV     = "$OutputFolder\CurrentMapping.csv"
+﻿# ============================================
+# SAFE NON-PROD BACKUP AUDIT SCRIPT
+# READ-ONLY - GLOBAL READER SAFE
+# PowerShell 5.1 Compatible
+# ============================================
 
-# Dry-run mode: $true = audit/log only, $false = actually apply
-$DryRun = $true
+Connect-AzAccount
 
-# Non-prod subscription IDs
-$ProdSubsPhaseA = @(
-    "325841e1-5f9d-4828-9042-02c0afe1fa43",
-    "c897867e-5a88-4dda-a0a7-fbab47742925",
-    "dadca81d-8560-4826-acae-3be792ac93e9",
-    "354c53a6-45f8-49c8-ad6e-4cbd5fc578f6"
+# ----------- DEFINE NON-PROD SUBSCRIPTIONS -----------
+
+$NonProdSubscriptions = @(
+    "242ea273-f410-4701-9f78-f9d5d1bf4788",
+    "15a10332-e234-483c-b5f8-98c893e1bded",
+    "4da90f32-8484-4f1f-836b-e1d63cd8585e",
+    "bd417f81-9e36-4bfb-8b53-6237674e0529",
+    "ccdaa912-583c-4bae-9d31-8dbb7856f763",
+    "14043a1a-3c25-4729-a4b6-c58738f2171d",
+    "547f24d3-6c9a-4a28-8b57-b15e2984fef9",
+    "3791c0a2-b604-4f3e-ad16-e66446cf1a7e",
+    "db7c19f5-bea7-44ca-9a52-7c5a3ef73f71",
+    "76569fbe-c870-4d4e-9359-6376262f21e1",
+    "c5a9f5d6-1aa1-44ad-bcec-36217430cd77",
+    "b69aab00-5450-4a61-989e-0af16401e9e9",
+    "e759fb00-b4cb-47a9-8f5b-112720a2a8f5",
+    "eacb2b72-994c-4e85-a8ae-ba2594545d00",
+    "2cf8dbb5-8708-40ee-92a9-089714260fbd",
+    "e3f7401b-554b-40d2-9234-1f2c8f6e2439",
+    "4def8413-d6b5-445a-9a80-84d122c5464b",
+    "b9c9a7fe-21f0-4e36-bbda-fd41076dc69f",
+    "ed9eb190-f796-44c2-8390-c57ff345778e",
+    "08a7c685-a9b3-4692-89c5-ee656d7924df"
 )
 
-# CSV outputs
-$Step1Log = "$OutputFolder\Step1_Immutability.csv"
-$Step2Log = "$OutputFolder\Step2_PolicyUpdate.csv"
-$Step3Log = "$OutputFolder\Step3_VMAssociation.csv"
+# ----------- OUTPUT LOCATION -----------
+
+$TimeStamp = Get-Date -Format "yyyyMMdd_HHmm"
+$OutputFolder = "C:\Temp\RSV_Audit_$TimeStamp"
+New-Item -ItemType Directory -Path $OutputFolder -Force | Out-Null
+
+Write-Host "Audit output folder: $OutputFolder" -ForegroundColor Cyan
